@@ -1,0 +1,76 @@
+# tasks file for common
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: Upgrade all packages (dist upgrade)
+  apt:
+    upgrade: dist
+    dpkg_options: 'force-confdef,force-confold'
+
+- name: Install baseline packages (excluding nodejs/npm - installed via NodeSource)
+  apt:
+    name:
+      - git
+      - curl
+      - unzip
+      - software-properties-common
+      - mysql-client
+      - python3-pymysql
+    state: present
+    install_recommends: no
+
+- name: Add NodeSource Node.js 20 repository
+  ansible.builtin.shell: |
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+  args:
+    executable: /bin/bash
+  become: true
+  register: nodesource_setup
+  changed_when: nodesource_setup.rc == 0
+
+- name: Install Node.js 20 and npm from NodeSource
+  apt:
+    name:
+      - nodejs
+    state: present
+    install_recommends: no
+  become: true
+
+- name: Verify Node.js and npm versions
+  ansible.builtin.command: node --version && npm --version
+  register: node_version
+  changed_when: false
+  become: true
+
+- name: Apply basic SSH hardening (disable root and password auth)
+  block:
+    - name: Disable PermitRootLogin in sshd_config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin no'
+        create: yes
+        backup: yes
+      notify: Restart SSH service
+
+    - name: Disable PasswordAuthentication in sshd_config
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PasswordAuthentication'
+        line: 'PasswordAuthentication no'
+        create: yes
+        backup: yes
+      notify: Restart SSH service
+
+    - name: Ensure ChallengeResponseAuthentication is disabled
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?ChallengeResponseAuthentication'
+        line: 'ChallengeResponseAuthentication no'
+        create: yes
+        backup: yes
+      notify: Restart SSH service
+

@@ -1,0 +1,99 @@
+---
+# tasks file for app
+
+- name: Ensure app directory exists
+  ansible.builtin.file:
+    path: "{{ book_review_app_dir }}"
+    state: directory
+    owner: "{{ book_review_app_user }}"
+    group: "{{ book_review_app_user }}"
+    mode: '0755'
+  become: true
+
+- name: Clone bookreview repository
+  ansible.builtin.git:
+    repo: "{{ book_review_app_repo_url }}"
+    dest: "{{ book_review_app_dir }}"
+    version: "{{ book_review_app_repo_version }}"
+    update: yes
+  become: true
+  become_user: "{{ book_review_app_user }}"
+  notify: Restart bookreview app
+
+- name: Deploy .env from template
+  template:
+    src: .env.j2
+    dest: "{{ book_review_app_dir }}/{{ backend_files_dir }}/.env"
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart bookreview app
+
+- name: Install npm dependencies
+  ansible.builtin.command: npm install
+  args:
+    chdir: "{{ book_review_app_dir }}/{{ backend_files_dir }}"
+  become: true
+  become_user: "{{ book_review_app_user }}"
+  notify: Restart bookreview app
+
+- name: Initialize database schema (Sequelize sync)
+  ansible.builtin.command: >
+    node -e "
+      const initializeDatabase = require('./src/config/db');
+      const User = require('./src/models/User');
+      const Book = require('./src/models/Book');
+      const Review = require('./src/models/Review');
+      
+      (async () => {
+        try {
+          const sequelize = await initializeDatabase();
+          
+          const UserModel = User(sequelize);
+          const BookModel = Book(sequelize);
+          const ReviewModel = Review(sequelize);
+          
+          await UserModel.sync({ alter: true });
+          await BookModel.sync({ alter: true });
+          await ReviewModel.sync({ alter: true });
+          
+          console.log('DB synced successfully');
+          process.exit(0);
+        } catch (err) {
+          console.error('DB sync failed:', err);
+          process.exit(1);
+        }
+      })();
+    "
+  args:
+    chdir: "{{ book_review_app_dir }}/{{ backend_files_dir }}"
+  become: true
+  become_user: "{{ book_review_app_user }}"
+  register: db_sync_result
+  failed_when: db_sync_result.rc != 0
+  changed_when: db_sync_result.rc == 0
+
+- name: Install PM2 globally
+  ansible.builtin.npm:
+    name: pm2
+    global: yes
+    state: present
+  become: true
+
+- name: Deploy PM2 systemd service
+  template:
+    src: pm2-app.service.j2
+    dest: /etc/systemd/system/{{ book_review_pm2_app_name }}.service
+    owner: root
+    group: root
+    mode: '0644'
+  become: true
+  notify: Reload systemd
+
+- name: Start and enable PM2 service
+  ansible.builtin.systemd:
+    name: "{{ book_review_pm2_app_name }}"
+    state: started
+    enabled: yes
+    daemon_reload: yes
+  become: true

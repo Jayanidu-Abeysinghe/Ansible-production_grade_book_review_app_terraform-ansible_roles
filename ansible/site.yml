@@ -1,0 +1,14 @@
+- name: Prepare frontend
+  hosts: web
+  become: true
+  roles:
+    - common
+    - nginx
+    - web
+
+- name: Prepare backend
+  hosts: app
+  become: true
+  roles:
+    - common
+    - app

@@ -1,0 +1,9 @@
+---
+# defaults file for app
+
+book_review_app_repo_url: "https://github.com/pravinmishraaws/book-review-app.git"
+book_review_app_repo_version: "main"
+backend_files_dir: "backend"
+book_review_app_dir: "/opt/book-review-app/app"
+book_review_app_user: "ubuntu"
+book_review_pm2_app_name: "backend-book-review-app"

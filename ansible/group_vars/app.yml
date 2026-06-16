@@ -1,0 +1,11 @@
+DB_HOST: <RDS_OR_MYSQL_HOST>
+DB_PORT: 3306
+DB_USER: "root"
+DB_PASS: "YourSecret123"
+DB_NAME: "bookreview"
+DB_DIALECT: "mysql"
+DB_SSL: true
+PORT: 3001
+NODE_ENV: "production"
+JWT_SECRET: "mysecretkey"
+ALLOWED_ORIGINS: http://<FRONTEND_DOMAIN>:3000

@@ -1,0 +1,14 @@
+---
+# handlers file for app
+
+- name: Restart bookreview app
+  ansible.builtin.systemd:
+    name: "{{ book_review_pm2_app_name }}"
+    state: restarted
+    daemon_reload: yes
+  become: true
+
+- name: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  become: true

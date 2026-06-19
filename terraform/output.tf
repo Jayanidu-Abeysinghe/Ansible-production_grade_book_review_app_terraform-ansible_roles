@@ -8,6 +8,11 @@ output "backend_public_ip" {
   value       = aws_instance.backend.public_ip
 }
 
+output "backend_private_ip" {
+  description = "Private IP address of the backend EC2 instance"
+  value       = aws_instance.backend.private_ip
+}
+
 output "rds_endpoint" {
   description = "RDS MySQL endpoint (DNS name)"
   value       = aws_db_instance.mysql.endpoint

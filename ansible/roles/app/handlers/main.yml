@@ -1,14 +1,15 @@
 ---
 # handlers file for app
+# PM2 manages Node.js apps more reliably, and --update-env ensures environment variable changes are applied.
 
 - name: Restart bookreview app
-  ansible.builtin.systemd:
-    name: "{{ book_review_pm2_app_name }}"
-    state: restarted
-    daemon_reload: yes
+  ansible.builtin.shell: |
+    pm2 describe "{{ book_review_pm2_app_name }}" >/dev/null 2>&1 \
+      && pm2 restart "{{ book_review_pm2_app_name }}" --update-env \
+      || pm2 start src/server.js --name "{{ book_review_pm2_app_name }}"
+    pm2 save
+  args:
+    chdir: "{{ book_review_app_dir }}/{{ backend_files_dir }}"
   become: true
-
-- name: Reload systemd
-  ansible.builtin.systemd:
-    daemon_reload: yes
-  become: true
+  become_user: "{{ book_review_app_user }}"
+  changed_when: true

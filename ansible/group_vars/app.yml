@@ -1,4 +1,4 @@
-DB_HOST: <RDS_OR_MYSQL_HOST>
+DB_HOST: "bookreview-production-mysql.ckzkuicoajpz.us-east-1.rds.amazonaws.com"
 DB_PORT: 3306
 DB_USER: "root"
 DB_PASS: "YourSecret123"
@@ -8,4 +8,4 @@ DB_SSL: true
 PORT: 3001
 NODE_ENV: "production"
 JWT_SECRET: "mysecretkey"
-ALLOWED_ORIGINS: http://<FRONTEND_DOMAIN>:3000
+ALLOWED_ORIGINS: "http://100.48.6.8,http://100.48.6.8:3000"  # Frontend is accessed via port 80 (Nginx), not port 3000. The backend needed to accept both origins.

@@ -1,1 +1,3 @@
-api_private_ip: "<private_ip>:3001"
+api_private_ip: 10.0.11.163:3001
+
+# Nginx uses this variable to proxy /api/ requests to the backend server.

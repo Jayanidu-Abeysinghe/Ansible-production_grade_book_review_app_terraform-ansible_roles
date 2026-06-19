@@ -1,15 +1,15 @@
 aws_region           = "us-east-1"
-aws_access_key = ""
-aws_secret_key = ""
+aws_access_key       = "AKIA2DZHV23N7ANSZYN7"
+aws_secret_key       = "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"
 vpc_cidr             = "10.0.0.0/16"
 public_subnet_cidrs  = ["10.0.1.0/24", "10.0.2.0/24"]
 private_subnet_cidrs = ["10.0.11.0/24", "10.0.12.0/24"]
 availability_zones   = ["us-east-1a", "us-east-1b"]
 
-frontend_instance_type = "t2.micro"
-backend_instance_type  = "t2.micro"
+frontend_instance_type = "t3.micro"
+backend_instance_type  = "t3.micro"
 
-ami_id = "ami-0c02fb55956c7d316"
+ami_id = "ami-04b4f1a9cf54c11d0"
 
 key_pair_name = "bookreview-keypair"
 

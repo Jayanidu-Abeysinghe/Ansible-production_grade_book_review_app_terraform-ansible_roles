@@ -8,12 +8,12 @@ User={{ book_review_app_user }}
 LimitNOFILE=infinity
 LimitNPROC=infinity
 LimitCORE=infinity
-Environment=PATH=/usr/bin:/usr/local/bin:/home/{{ book_review_app_user }}/.nvm/versions/node/v20*/bin
+Environment=PATH=/home/{{ book_review_app_user }}/.nvm/versions/node/v*/bin:/usr/local/bin:/usr/bin:/bin
 Environment=PM2_HOME=/home/{{ book_review_app_user }}/.pm2
 WorkingDirectory={{ book_review_app_dir }}/{{ frontend_files_dir }}
-ExecStart=/usr/local/bin/pm2 start npm --name "{{ book_review_pm2_app_name }}" -- start
-ExecReload=/usr/local/bin/pm2 reload "{{ book_review_pm2_app_name }}" --update-env
-ExecStop=/usr/local/bin/pm2 stop "{{ book_review_pm2_app_name }}"
+ExecStart=pm2 start npm --name "{{ book_review_pm2_app_name }}" -- start
+ExecReload=pm2 reload "{{ book_review_pm2_app_name }}" --update-env
+ExecStop=pm2 stop "{{ book_review_pm2_app_name }}"
 PIDFile=/home/{{ book_review_app_user }}/.pm2/pm2.pid
 Restart=on-failure
 

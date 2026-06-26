@@ -248,6 +248,28 @@ ansible-playbook site.yml -i inventory.ini --limit app
 # Update dependencies only
 ansible web -i inventory.ini -m shell -a "cd /opt/book-review-app/web/frontend && npm install && npm run build && pm2 restart frontend-book-review-app" --become --become-user=ubuntu
 ```
+## Inventory Structure
+
+We use separate inventories for each environment:
+
+```
+inventories/
+├── dev/
+│ └── hosts.ini
+│
+├── test/
+│ └── hosts.ini
+│
+└── prod/
+└── hosts.ini
+```
+Each `hosts.ini` file contains the servers for that environment.
+
+Running Playbooks
+
+```yaml
+ansible-playbook -i inventories/dev/hosts.ini site.yml
+```
 
 ---
 

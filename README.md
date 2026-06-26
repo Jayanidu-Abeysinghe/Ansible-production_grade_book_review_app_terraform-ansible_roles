@@ -255,14 +255,36 @@ We use separate inventories for each environment:
 ```
 inventories/
 ├── dev/
-│ └── hosts.ini
+│ ├── hosts.ini
+│ └── group_vars/
+│ ├── web.yml
+│ └── app.yml
 │
 ├── test/
-│ └── hosts.ini
+│ ├── hosts.ini
+│ └── group_vars/
+│ ├── web.yml
+│ └── app.yml
 │
 └── prod/
-└── hosts.ini
+├── hosts.ini
+└── group_vars/
+├── web.yml
+└── app.yml
 ```
+
+## How It Works
+
+Each environment has its own `group_vars` directory:
+
+- `dev/group_vars/` → Development configuration
+- `test/group_vars/` → Testing configuration
+- `prod/group_vars/` → Production configuration
+
+Ansible automatically loads variables based on:
+- Environment (inventory used)
+- Group name (web, app, etc.)
+
 Each `hosts.ini` file contains the servers for that environment.
 
 Running Playbooks

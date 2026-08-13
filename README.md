@@ -446,6 +446,15 @@ pm2 stop <app-name>
 pm2 delete <app-name>
 pm2 save              # Persist current process list
 ```
+<p align="center">
+  <img src="https://github.com/Jayanidu-Abeysinghe/Ansible-production_grade_book_review_app_terraform-ansible_roles/blob/main/images/pm2%20status%20backend.png" width="800"><br><br>
+  <em>pm2 status backend</em>
+</p>
+
+<p align="center">
+  <img src="https://github.com/Jayanidu-Abeysinghe/Ansible-production_grade_book_review_app_terraform-ansible_roles/blob/main/images/pm2%20status%20frontend.png" width="800"><br><br>
+  <em>pm2 status frontend</em>
+</p>
 
 ---
 

@@ -4,6 +4,11 @@ A production-grade full-stack book review application deployed on AWS using **Te
 
 ## 🏗 Architecture Overview
 
+<p align="center">
+  <img src="https://github.com/Jayanidu-Abeysinghe/Ansible-production_grade_book_review_app_terraform-ansible_roles/blob/main/images/Architecture%20diagram.png" width="800"><br><br>
+  <em>Architecture Diagram</em>
+</p>
+
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                        AWS VPC                                   │
@@ -121,6 +126,11 @@ terraform output backend_private_ip      # App server private IP
 terraform output rds_endpoint            # RDS MySQL endpoint (host:port)
 terraform output private_key_path        # Path to SSH private key
 ```
+<p align="center">
+  <img src="https://github.com/Jayanidu-Abeysinghe/Ansible-production_grade_book_review_app_terraform-ansible_roles/blob/main/images/Terraform.png" width="800"><br><br>
+  <em>Terraform</em>
+</p>
+
 
 ### Step 3: Configure Ansible Variables
 
@@ -183,6 +193,11 @@ ansible-playbook site.yml -i inventory.ini --check
 # Full deployment
 ansible-playbook site.yml -i inventory.ini
 ```
+
+<p align="center">
+  <img src="https://github.com/Jayanidu-Abeysinghe/Ansible-production_grade_book_review_app_terraform-ansible_roles/blob/main/images/Ansible.png" width="800"><br><br>
+  <em>Ansible</em>
+</p>
 
 **What Ansible Does:**
 
